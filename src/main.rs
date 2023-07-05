@@ -14,12 +14,18 @@ fn main() -> battery::Result<()> {
     let wait_time: u64 = match env::args().nth(1) {
         Some(arg1) => arg1
             .parse()
-            .expect("Not a valid number of minutes passed as an argument"),
-        None => 5,
+            .expect("Not a valid number of seconds passed as an argument"),
+        None => 1800,
     };
 
-    if !Path::new("logs").exists() {
-        fs::create_dir_all("logs").expect("Failed to create cache directory");
+    let logs_path: String = format!(
+        "{}/{}",
+        home::home_dir().unwrap().display(),
+        ".cache/batt_stats"
+    );
+
+    if !Path::new(logs_path.as_str()).exists() {
+        fs::create_dir_all(logs_path.as_str()).expect("Failed to create cache directory");
     }
 
     let (mut battery, manager) = get_battery().expect("Failed to get battery!");
@@ -40,7 +46,7 @@ fn main() -> battery::Result<()> {
 
             writeln!(
                 log_file,
-                "{} - Battery: {:?}% {:?}w",
+                "{} {:?} {:?}",
                 Local::now().format("%Y-%m-%d %H:%M:%S"),
                 current_percent,
                 current_rate,
@@ -74,7 +80,13 @@ fn get_battery() -> battery::Result<(battery::Battery, battery::Manager)> {
 
 fn manage_log_file() -> std::fs::File {
     let current_time = Local::now().format("%Y-%m-%d %H:%M:%S");
-    let log_file_path: String = format!("logs/{}.txt", current_time);
+    let log_file_path: String = format!(
+        "{}/{}/{}.txt",
+        home::home_dir().unwrap().display(),
+        ".cache/batt_stats",
+        current_time
+    );
+
     let log_file_path = Path::new(&log_file_path);
 
     // Create or open the log file
@@ -84,4 +96,3 @@ fn manage_log_file() -> std::fs::File {
         .open(log_file_path)
         .expect("Failed to open the log file.")
 }
-
