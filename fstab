@@ -1,0 +1,11 @@
+# /dev/sda1
+UUID=00BD-B6B9      	/boot     	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/sda3
+UUID=ded7aa99-3bb9-4477-9832-d44268d53656      	swap      	defaults  	0 0
+
+# /dev/sda2
+UUID=fb85cd1f-be17-4431-849f-fc322bbb8ac1       /         	ext4      	rw,relatime	0 1
+
+# /dev/sda4
+UUID=55c21331-5df2-48bd-a46e-731fa399a1fd       /home     	ext4      	rw,relatime	0 2
